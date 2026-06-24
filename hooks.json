@@ -1,0 +1,16 @@
+{
+  "cleanup-browser": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agent-browser close",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

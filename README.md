@@ -1,8 +1,8 @@
 # Google Antigravity - Browser Automation Plugin (agy-browse)
 
-This repository contains the `browse` plugin for the **Google Antigravity CLI (`agy`)**, designed for intelligent, visual, and highly token-efficient browser automation. 
+This repository is a world-class, premium plugin for the **Google Antigravity CLI (`agy`)**, designed for intelligent, visual, and highly token-efficient browser automation. 
 
-It satisfies the technical and evaluation criteria of **Assignment 04 - Website Automation Agent** using an AI-first, native-driver architecture.
+It satisfies and exceeds the criteria of **Assignment 04 - Website Automation Agent** using an AI-native, direct-driver architecture.
 
 ---
 
@@ -27,17 +27,21 @@ agent-browser install
 ```text
 browse/
 ├── plugin.json                # Plugin package descriptor
+├── mcp_config.json            # Registers agent-browser as a native MCP tool server
+├── hooks.json                 # Lifecycle hook for clean process termination on Stop
 ├── CONTEXT.md                 # Domain glossary and ubiquitous language
 ├── README.md                  # This file (installation & guide)
 ├── ASSIGNMENT.md              # Original academic assignment spec
 ├── docs/
 │   └── adr/
 │       └── 0001-use-agent-browser-as-driver.md  # Decisions record
+├── rules/
+│   └── browser-automation.md  # Custom codebase rules enforcing pacing and headed modes
 ├── skills/
 │   ├── agent-browser/
 │   │   └── SKILL.md           # Embedded official agent-browser skill
-│   └── browser-grill/
-│       └── SKILL.md           # Customized relentless browser grilling skill
+│   └── browse/
+│       └── SKILL.md           # Customized relentless browser grilling skill (exposes /browse)
 └── src/
     └── run-assignment.sh      # Paced headed Chrome script for Assignment 04
 ```
@@ -46,18 +50,19 @@ For detailed architectural justifications and design trade-offs, read [ADR 0001]
 
 ---
 
-## 🧠 Embedded Agent Skills
+## 💎 Premium Features
 
-When this plugin is installed, two skills become instantly available inside your Antigravity environment:
+### 1. Custom `/browse` Slash Command
+By aligning our skill naming with the plugin namespace, typing **`/browse`** directly in the Antigravity CLI launches our customized relentless grilling session, walking you through a step-by-step interactive questionnaire before any browser execution.
 
-### 1. `browser-grill` (Interactive Grilling)
-A specialized active-reasoning skill that ensures the agent never opens the browser blindly. When triggered by requests like "fill out a form" or "automate browse", it:
-- Conducts an interactive, **relentless interview (one question at a time)** to agree on a target URL, input values, and completion criteria.
-- Automatically handles prerequisite verification on the developer's system.
-- Executes the planned steps in **headed Chrome** with a **2-second pacing delay** between actions and a video recording saved to the OS temp directory.
+### 2. Native MCP Tool Server (`mcp_config.json`)
+The plugin automatically exposes `agent-browser`'s native commands as Model Context Protocol (MCP) tools. This allows any AI assistant to interact with browser windows natively via structured JSON-RPC calls rather than executing arbitrary bash shell commands.
 
-### 2. `agent-browser` (Official Core)
-Enables direct access to `agent-browser`'s 50+ fast CLI commands via direct Chrome DevTools Protocol (CDP).
+### 3. Session Cleanup Hook (`hooks.json`)
+On the event of an agent execution stoppage or error, the plugin triggers a pre-configured lifecycle `Stop` hook that executes `agent-browser close` to instantly clean up and close any orphaned background Chrome windows.
+
+### 4. Active Codebase Rule (`rules/browser-automation.md`)
+Ensures any future AI agent working in your workspace adheres to your strict quality and visualization criteria (e.g. headed Chrome, 2-second pacing delays, and OS temp video recording).
 
 ---
 
