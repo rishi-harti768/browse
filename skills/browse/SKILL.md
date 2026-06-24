@@ -1,10 +1,10 @@
 ---
-name: browser-grill
+name: browse
 description: Custom relentless grilling skill for browser automation. Activate when the user asks for any browser automation, web interaction, form filling, scraping, testing, or web navigation task. Enforces a rigorous step-by-step interview to align on a paced, watchable headed Chrome automation plan.
 allowed-tools: Bash(agent-browser:*), Bash(npx agent-browser:*)
 ---
 
-# browser-grill
+# browse
 
 This skill governs how AI agents interact with users for browser automation tasks under the `browse` plugin. It forces the agent to align on a precise plan through an interactive, relentless interview before launching headed Chrome.
 
