@@ -2,7 +2,7 @@
   "cleanup-browser": {
     "Stop": [
       {
-        "matcher": ".*",
+        "matcher": "run-assignment",
         "hooks": [
           {
             "type": "command",
