@@ -13,7 +13,7 @@ These rules govern the decision-making and execution strategies of the Antigravi
 
 * **Rule 1.2: Pacing Enforcer**
   * **Rule**: You MUST insert an artificial delay of **1.5 to 2 seconds** between consecutive interactions (clicks, keypresses, navigation).
-  * **Driver Commands**: Use `agent-browser wait milliseconds 1500` or insert deliberate shell waits.
+  * **Driver Commands**: Use `agent-browser wait 1500` or insert deliberate shell waits.
   * **Reason**: Real-time visual tracking must be easily followable by human viewers.
 
 * **Rule 1.3: Mandatory Recording**

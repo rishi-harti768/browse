@@ -1,8 +1,6 @@
 # Google Antigravity - Browser Automation Plugin (agy-browse)
 
-This repository is a world-class, premium plugin for the **Google Antigravity CLI (`agy`)**, designed for intelligent, visual, and highly token-efficient browser automation. 
-
-It satisfies and exceeds the criteria of **Assignment 04 - Website Automation Agent** using an AI-native, direct-driver architecture.
+This repository is a premium plugin for the **Google Antigravity CLI (`agy`)**, designed for intelligent, visual, and highly token-efficient browser automation. 
 
 ---
 
@@ -27,23 +25,24 @@ agent-browser install
 ```text
 browse/
 ├── plugin.json                # Plugin package descriptor
-├── mcp_config.json            # Registers agent-browser as a native MCP tool server
-├── hooks.json                 # Lifecycle hook for clean process termination on Stop
-├── CONTEXT.md                 # Domain glossary and ubiquitous language
+├── CONTEXT.md                 # Domain glossary and glossary of terms
 ├── README.md                  # This file (installation & guide)
 ├── ASSIGNMENT.md              # Original academic assignment spec
 ├── docs/
-│   └── adr/
-│       └── 0001-use-agent-browser-as-driver.md  # Decisions record
+│   ├── adr/
+│   │   ├── 0001-use-agent-browser-as-driver.md  # Decision: using agent-browser over standard libs
+│   │   └── 0002-headed-pacing-recording.md      # Decision: forced headed pacing and recording
+│   └── agents/
+│       ├── domain.md          # Domain documentation guidelines
+│       ├── issue-tracker.md   # Issue tracking guidelines
+│       └── triage-labels.md   # Triage label guidelines
 ├── rules/
-│   └── browser-automation.md  # Custom codebase rules enforcing pacing and headed modes
-├── skills/
-│   ├── agent-browser/
-│   │   └── SKILL.md           # Embedded official agent-browser skill
-│   └── browse/
-│       └── SKILL.md           # Customized relentless browser grilling skill (exposes /browse)
-└── src/
-    └── run-assignment.sh      # Paced headed Chrome script for Assignment 04
+│   └── browse-rules.md        # Custom codebase rules enforcing pacing and headed modes
+└── skills/
+    ├── agent-browser/
+    │   └── SKILL.md           # Embedded official agent-browser skill
+    └── browse/
+        └── SKILL.md           # Customized relentless browser grilling skill (exposes /browse)
 ```
 
 For detailed architectural justifications and design trade-offs, read [ADR 0001](docs/adr/0001-use-agent-browser-as-driver.md) and [CONTEXT.md](CONTEXT.md).
@@ -53,35 +52,49 @@ For detailed architectural justifications and design trade-offs, read [ADR 0001]
 ## 💎 Premium Features
 
 ### 1. Custom `/browse` Slash Command
-By aligning our skill naming with the plugin namespace, typing **`/browse`** directly in the Antigravity CLI launches our customized relentless grilling session, walking you through a step-by-step interactive questionnaire before any browser execution.
+By aligning our skill naming with the plugin namespace, typing **`/browse <instruction>`** directly in the Antigravity CLI launches our customized relentless grilling session, walking you through a step-by-step interactive questionnaire to align on a robust, human-watchable automation plan before any browser execution.
 
-### 2. Native MCP Tool Server (`mcp_config.json`)
-The plugin automatically exposes `agent-browser`'s native commands as Model Context Protocol (MCP) tools. This allows any AI assistant to interact with browser windows natively via structured JSON-RPC calls rather than executing arbitrary bash shell commands.
+### 2. Active Codebase Rule (`rules/browse-rules.md`)
+Ensures any future AI agent working in your workspace adheres to your strict quality and visualization criteria (headed Chrome, 1.5s - 2s pacing delays, and automatic OS temp video recording).
 
-### 3. Session Cleanup Hook (`hooks.json`)
-On the event of an agent execution stoppage or error, the plugin triggers a pre-configured lifecycle `Stop` hook that executes `agent-browser close` to instantly clean up and close any orphaned background Chrome windows.
-
-### 4. Active Codebase Rule (`rules/browser-automation.md`)
-Ensures any future AI agent working in your workspace adheres to your strict quality and visualization criteria (e.g. headed Chrome, 2-second pacing delays, and OS temp video recording).
+### 3. Snapshot-First Reference Interaction
+Utilizes the high-efficiency snapshot-and-reference pattern of `agent-browser`. Instead of digesting raw DOMs, the driver analyzes compact accessibility trees to find stable alphanumeric references (e.g. `@e1`, `@e2`) for incredibly fast and reliable form interaction.
 
 ---
 
 ## 🎯 Running the Assignment 04 Automation
 
-To run the headed, paced form-filling automation on the Shadcn react-hook-form page, run our reference bash script:
+You can run the headed, paced form-filling automation on the Shadcn react-hook-form page directly using the `agent-browser` CLI commands in your terminal:
 
 ```bash
-bash src/run-assignment.sh
-```
+# 1. Open headed Chrome session
+agent-browser open --headed --session browse_session
 
-### What happens during the run:
-1.  Verifies the presence of `agent-browser`.
-2.  Launches a visible (**headed**) instance of Google Chrome.
-3.  Initializes a video recording saved to your OS temporary directory:
-    -   *Windows*: `%TEMP%\agy-shadcn-form-<timestamp>.webm`
-    -   *Unix/macOS*: `/tmp/agy-shadcn-form-<timestamp>.webm`
-4.  Navigates to `https://ui.shadcn.com/docs/forms/react-hook-form`.
-5.  Fills out the **Username** and **More about you (Description)** fields using semantic labels.
-6.  Triggers a **2-second pacing delay** between key actions so you and your examiners can watch the visual inputs in real-time.
-7.  Saves a final confirmation screenshot to your OS temporary folder.
-8.  Stops the recording, terminates the browser session, and outputs the exact video file path.
+# 2. Start recording video of the session (saved in your OS temp directory)
+# Windows (cmd/PowerShell):
+agent-browser record start "%TEMP%\browse_session_form.webm"
+# Unix/macOS:
+agent-browser record start "/tmp/browse_session_form.webm"
+
+# 3. Navigate to the Assignment target page
+agent-browser open https://ui.shadcn.com/docs/forms/react-hook-form
+
+# 4. Take an interactive snapshot to get element references
+agent-browser snapshot -i
+
+# 5. Fill out form fields using references (with pacing delays)
+agent-browser fill @e1 "Antigravity Agent"
+agent-browser wait 1500
+agent-browser fill @e2 "Automated browser testing using Vercel's agent-browser under Antigravity CLI."
+agent-browser wait 1500
+
+# 6. Take confirmation screenshot
+# Windows:
+agent-browser screenshot "%TEMP%\confirmation.png"
+# Unix/macOS:
+agent-browser screenshot "/tmp/confirmation.png"
+
+# 7. Stop recording and close the session
+agent-browser record stop
+agent-browser close --all
+```

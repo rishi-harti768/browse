@@ -36,7 +36,7 @@ The agent must rigorously implement the following sequence to guarantee session 
 * To ensure the execution is watchable and understandable by human viewers during live presentations or visual audits, apply a **Pacing** delay of **1.5 to 2 seconds** after every single browser operation (e.g. navigation, click, form fill).
 * For scripts or commands, insert a wait command:
   ```bash
-  agent-browser wait milliseconds 1500
+  agent-browser wait 1500
   ```
 
 ### Step 3: Action Execution
