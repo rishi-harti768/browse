@@ -64,37 +64,51 @@ Utilizes the high-efficiency snapshot-and-reference pattern of `agent-browser`. 
 
 ## 🎯 Running the Assignment 04 Automation
 
-You can run the headed, paced form-filling automation on the Shadcn react-hook-form page directly using the `agent-browser` CLI commands in your terminal:
+You can run the headed, paced form-filling automation on the Shadcn react-hook-form page directly using the `agent-browser` CLI.
 
-```bash
-# 1. Open headed Chrome session
-agent-browser open --headed --session browse_session
+> [!NOTE]
+> **Windows Process Cleanup Notice**: When running commands in sequential tool blocks, Windows automatically cleans up the active process tree on completion of each command. To keep the browser window open and active across separate steps, launch it in a detached state using WMI as shown in Step 2.
+>
+> **Video Recording Note**: Video recording requires `ffmpeg` to be installed. On Windows, you can install it globally via:
+> ```powershell
+> winget install Gyan.FFmpeg
+> ```
 
-# 2. Start recording video of the session (saved in your OS temp directory)
-# Windows (cmd/PowerShell):
-agent-browser record start "%TEMP%\browse_session_form.webm"
-# Unix/macOS:
-agent-browser record start "/tmp/browse_session_form.webm"
-
-# 3. Navigate to the Assignment target page
-agent-browser open https://ui.shadcn.com/docs/forms/react-hook-form
-
-# 4. Take an interactive snapshot to get element references
-agent-browser snapshot -i
-
-# 5. Fill out form fields using references (with pacing delays)
-agent-browser fill @e1 "Antigravity Agent"
-agent-browser wait 1500
-agent-browser fill @e2 "Automated browser testing using Vercel's agent-browser under Antigravity CLI."
-agent-browser wait 1500
-
-# 6. Take confirmation screenshot
-# Windows:
-agent-browser screenshot "%TEMP%\confirmation.png"
-# Unix/macOS:
-agent-browser screenshot "/tmp/confirmation.png"
-
-# 7. Stop recording and close the session
-agent-browser record stop
+```powershell
+# 1. Close any stale background daemons to prevent --headed being ignored
 agent-browser close --all
+
+# 2. Open headed Chrome session
+# On macOS / Linux (standard):
+agent-browser open --headed --session browse_session
+# On Windows (persistent / detached across separate command blocks):
+Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = "cmd.exe /c agent-browser open --headed --session browse_session" }
+
+# 3. Start recording video of the session (saved in your OS temp directory)
+# Windows:
+agent-browser --session browse_session record start "%TEMP%\browse_session_form.webm"
+# Unix/macOS:
+agent-browser --session browse_session record start "/tmp/browse_session_form.webm"
+
+# 4. Navigate to the Assignment target page
+agent-browser --session browse_session open https://ui.shadcn.com/docs/forms/react-hook-form
+
+# 5. Take an interactive snapshot to get element references
+agent-browser --session browse_session snapshot -i
+
+# 6. Fill out form fields using references (with pacing delays)
+agent-browser --session browse_session fill @e1 "Antigravity Agent"
+agent-browser --session browse_session wait 1500
+agent-browser --session browse_session fill @e2 "Automated browser testing using Vercel's agent-browser under Antigravity CLI."
+agent-browser --session browse_session wait 1500
+
+# 7. Take confirmation screenshot
+# Windows:
+agent-browser --session browse_session screenshot "%TEMP%\confirmation.png"
+# Unix/macOS:
+agent-browser --session browse_session screenshot "/tmp/confirmation.png"
+
+# 8. Stop recording and close the session
+agent-browser --session browse_session record stop
+agent-browser --session browse_session close
 ```

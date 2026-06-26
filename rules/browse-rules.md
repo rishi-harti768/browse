@@ -7,8 +7,12 @@ These rules govern the decision-making and execution strategies of the Antigravi
 ## 1. Core Directives
 
 * **Rule 1.1: Visual Integrity (Headed Chrome)**
-  * **Rule**: You MUST always launch and run the browser in visible headed mode. 
+  * **Rule**: You MUST always launch and run the browser in visible headed mode.
   * **Driver Flag**: Always append `--headed` to browser-open operations.
+  * **Pre-requisite**: You MUST always execute `agent-browser close --all` before starting a browser session to ensure any existing headless daemons are killed, preventing `agent-browser` from silently ignoring the `--headed` option.
+  * **Windows Persist**: To make the browser window stay open and visible across separate tool calls when executed by agents on Windows, you MUST launch the browser in a detached state using WMI:
+    `Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = "cmd.exe /c agent-browser open --headed --session browse_session" }`
+  * **Session Integrity**: You MUST always explicitly target the launched session (e.g. `--session browse_session`) or set the `AGENT_BROWSER_SESSION` environment variable in every command block. Otherwise, commands default to a separate headless default session.
   * **Reason**: Live demonstrations, visual auditing, and debugging require real-time visibility.
 
 * **Rule 1.2: Pacing Enforcer**

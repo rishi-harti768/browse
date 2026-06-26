@@ -21,15 +21,25 @@ This skill guides the agent through launching and automating browser interaction
 The agent must rigorously implement the following sequence to guarantee session recording and visible presentation:
 
 ### Step 1: Session Initialization
-* Initialize the browser session in **Headed Chrome** mode:
+* Always ensure any existing background daemons (which might be running in headless mode) are closed first, preventing the `--headed` flag from being silently ignored:
   ```bash
-  agent-browser open --headed --session browse_session
+  agent-browser close --all
   ```
-* Immediately start recording the session. The output video must be a `.webm` file stored in the OS temporary directory:
+* Initialize the browser session in **Headed Chrome** mode:
+  * **Default / macOS / Linux**:
+    ```bash
+    agent-browser open --headed --session browse_session
+    ```
+  * **Windows (to persist across separate tool calls/steps)**: Launch in a detached state using WMI so the browser doesn't automatically close on process completion:
+    ```powershell
+    Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = "cmd.exe /c agent-browser open --headed --session browse_session" }
+    ```
+* **IMPORTANT**: Always explicitly specify `--session browse_session` or set the `AGENT_BROWSER_SESSION=browse_session` environment variable for all subsequent interaction and screenshot commands to ensure they connect to the correct running headed session.
+* Immediately start recording the session. The output video must be a `.webm` file stored in the OS temporary directory (Note: requires `ffmpeg` to be installed on the system):
   * **Windows**: `%TEMP%\browse_session_YYYYMMDD_HHMMSS.webm` (dynamically resolving `%TEMP%`)
   * **Command**:
     ```bash
-    agent-browser record start "%TEMP%\browse_session_20260626_160200.webm"
+    agent-browser --session browse_session record start "%TEMP%\browse_session_20260626_160200.webm"
     ```
 
 ### Step 2: Human-Centered Pacing
